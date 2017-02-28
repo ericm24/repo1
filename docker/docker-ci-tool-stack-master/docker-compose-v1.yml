@@ -1,0 +1,131 @@
+nexus:
+  build: ./nexus
+  ports:
+    - "18081:8081"
+
+# Disable this for use on MAC 
+#  volumes:
+#    - /mnt/dockervolumes/data/nexus:/sonatype-work
+
+jenkins:
+  build: ./jenkins
+  ports:
+    - "18080:8080"
+
+#
+# Remember!!! Environment only applies to runtime, NOT BUILDTIME for docker, so no --build-args (until docker-compose version 1.9.0.x)
+#
+  environment:
+    - DOCKER_HOST_IP=${DOCKER_HOST_IP}
+
+  links:
+    - nexus:nexus
+    - gitlab:gitlab
+    - sonar:sonar
+    - selhub:hub
+
+  volumes:
+    - /mnt/dockervolumes/data/jenkins:/var/jenkins_home
+
+sonar:
+  build: ./sonar
+  ports:
+   - "19000:9000"
+   - "5432:5432"
+  environment:
+     - SONARQUBE_JDBC_URL=jdbc:postgresql://localhost:5432/sonar
+
+db:
+  image: postgres
+  net: container:sonar
+  environment:
+   - POSTGRES_USER=sonar
+   - POSTGRES_PASSWORD=sonar
+
+selhub:
+  image: selenium/hub
+  ports:
+    - "4444:4444"
+
+nodeff:
+  image: selenium/node-firefox-debug
+  ports:
+    - "5900:5900"
+  links:
+    - selhub:hub
+
+# Chrome does not work, has some problem on startup, which then causes the rest of the containers to stop.  Why?
+nodechrome:
+  image: selenium/node-chrome-debug
+  ports:
+    - "5901:5901"
+  links:
+    - selhub:hub
+
+postgresql:
+  image: sameersbn/postgresql:9.4-3
+  environment:
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
+  volumes:
+    - /mnt/dockervolumes/data/postgresql:/var/lib/postgresql
+
+gitlab:
+  image: sameersbn/gitlab:8.0.3
+  links:
+    - redis:redisio
+    - postgresql:postgresql
+  ports:
+    - "10080:80"
+    - "10022:22"
+  environment:
+    - TZ=Europe/Berlin
+    - GITLAB_TIMEZONE=Berlin  
+
+#    - TZ=America/New_York
+#    - GITLAB_TIMEZONE=New_York
+#    - TZ=America/Chicago
+#    - GITLAB_TIMEZONE=Chicago
+
+    - GITLAB_SECRETS_DB_KEY_BASE=long-and-random-alphanumeric-string
+    - GITLAB_HOST=192.168.99.100
+    - GITLAB_PORT=10080
+    - GITLAB_SSH_PORT=10022
+
+    - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
+    - GITLAB_NOTIFY_PUSHER=false
+
+    - GITLAB_EMAIL=notifications@example.com
+    - GITLAB_EMAIL_REPLY_TO=noreply@example.com
+    - GITLAB_INCOMING_EMAIL_ADDRESS=reply@example.com
+
+    - GITLAB_BACKUPS=daily
+    - GITLAB_BACKUP_TIME=01:00
+
+    - ANSIBLE_CONFIG=/dev2/ansible/config/ansible.cfg
+
+    - SMTP_ENABLED=false
+    - SMTP_DOMAIN=www.example.com
+    - SMTP_HOST=smtp.gmail.com
+    - SMTP_PORT=587
+    - SMTP_USER=mailer@example.com
+    - SMTP_PASS=password
+    - SMTP_STARTTLS=true
+    - SMTP_AUTHENTICATION=login
+
+    - IMAP_ENABLED=false
+    - IMAP_HOST=imap.gmail.com
+    - IMAP_PORT=993
+    - IMAP_USER=mailer@example.com
+    - IMAP_PASS=password
+    - IMAP_SSL=true
+    - IMAP_STARTTLS=false
+  volumes:
+    - /mnt/dockervolumes/data/gitlab:/home/git/data
+
+redis:
+  image: sameersbn/redis:latest
+  volumes:
+    - /mnt/dockervolumes/data/redis:/var/lib/redis
+

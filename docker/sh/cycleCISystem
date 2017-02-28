@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# Script that will:
+#
+#   1.  Pulls latest Source from git.
+#		2.  Shut down Docker CI System.
+#   3.  Optional: Delete data for that docker-app-volume.
+#		4.  Remove Existing Docker-Containers (Leaves Data-Volumes As-Is Default).
+#   5.  Remove Dangling Docker-Containers
+#
+#   6.  Rebuilds Docker Images:
+#          Jenkins
+#          Others?
+#
+#   7.  Re-Starts Docker Containers
+#
+#	 set -x
+
+  
+   if [ $# -lt 1 ] 
+   	then
+   		echo " "
+   		echo " "
+   		echo " "
+			echo "Usage:   $0 gitPassword [hammerJenkinsData]"
+   		echo " "
+   		echo " "
+   		echo " "
+   		exit 1
+   fi
+   
+   tLogFile=
+   tLogFile="/data/txt/cycleCISystemLog.txt"
+   
+	 tPassword=
+	 tPassword=$1	 
+
+	 rm "$tLogFile"
+	 
+	 cd /dev2/ansible/mservice/master/rm-monitoring
+	 
+	 echo " "
+	 echo "Updating From git....."
+   echo " "
+   
+   git remote set-url origin https://xUser:"$tPassword"@github.com/ericm24/repo1.git
+   
+   git pull | tee -a "$tLogFile"
+   
+	 echo " "
+	 echo "Shutting Down CI System...."
+   echo " "
+	 		   
+	 dockerCITools stop | tee -a "$tLogFile"
+
+	 for i do
+
+			 case "$i" in 
+			     hammerJenkinsData)
+			       echo " "
+			       echo "*** Deleting Jenkins Volume!!! ***"
+			       echo " "
+			       rm -rfv /mnt/dockervolumes/data/jenkins | tee -a "$tLogFile"
+			       ;;
+			    *)
+       esac
+       
+	 done
+
+	 echo " "
+	 echo "Remove Existing Containers...."
+   echo " "
+	 
+	 killDockerDanglerz | tee -a "$tLogFile"
+
+	 cd /dev2/ansible/mservice/master/rm-monitoring/docker/docker-ci-tool-stack-master
+	 
+	 echo " "
+	 echo "Rebuilding Jenkins..."
+   echo " "
+	 
+	 docker-compose build --no-cache jenkins | tee -a "$tLogFile"
+
+	 echo " "
+	 echo "Re-Starting CI System...."
+   echo " "
+
+	 dockerCITools start | tee -a "$tLogFile" &
+

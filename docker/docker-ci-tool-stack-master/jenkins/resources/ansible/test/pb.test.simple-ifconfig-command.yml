@@ -1,0 +1,13 @@
+---
+- name: Simple ifconfig 
+  hosts: all
+  sudo: no
+  gather_facts: True
+  remote_user: root 
+  tasks:
+    - name:  Do me an ifconfig
+      command:  ifconfig
+      register: my_output
+
+    - name: debug
+      debug: var=my_output

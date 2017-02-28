@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Power-add a new host for ansible-ssh
+#
+
+#  set -x
+ 
+if [ $# -ne 1 ]; then
+    echo "Provide a <IP-ADDRESS>"
+    echo "Usage add_ssh_host <IP-ADDRESS>"
+    exit 1
+fi
+ 
+HOSTIPADDR=$1
+ 
+if [ ! -f ~/.ssh/id_rsa ]; then
+    echo 'Local SSH Key Pair is GONE!!! '
+#    ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+		exit 2
+fi
+ 
+echo 'add host to ~/.ssh/known_hosts'
+
+ssh root@${HOSTIPADDR} mkdir -p /root/.ssh
+ 
+echo 'add the public key to the remote hosts ~/.ssh/authorized_keys file'
+
+cat ~/.ssh/id_rsa.pub | ssh root@${HOSTIPADDR} 'cat >> /root/.ssh/authorized_keys'
+ 
+echo 'Test The Connection........'
+
+ssh root@${HOSTIPADDR}

@@ -1,0 +1,125 @@
+#
+# For some reason, for Vagrant VMs we gotta have the names in both the brackets & on the line below.  Otherwise it
+# gets them confused....
+#
+
+# localhost			ansible_python_interpreter=/usr/local/bin/python
+
+[checkmaster]
+checkmaster
+127.0.0.1:2222
+
+[checkmonitor]
+checkmonitor
+127.0.0.1:2200
+
+
+[Eric.Server.CheckMK-Server.12]
+10.122.225.12
+
+[Eric.Server.CheckMK.Salt.Master]
+10.122.225.20
+
+[Eric.Server.CheckMK-Server.14]
+10.122.225.14
+
+[Eric.Server.CheckMK-Server.16]
+10.122.225.16
+
+[Eric.Server.CheckMK-Server.21]
+10.130.169.21
+
+[Eric.Server.CheckMK-Server.26]
+10.130.169.26
+
+[Eric.Server.Monitor-Kube-Server.24]
+10.130.169.24
+
+[Eric.Server.Monitor-CI-Server.25]
+10.130.169.25
+
+[Eric.Server.CheckMK-Server.sg12]
+10.130.169.12
+
+
+[Eric.Server.ZenOSS-Server.18]
+10.130.169.18
+
+[Eric.Server.ZenOSS-Server.19]
+10.130.169.19
+
+[Eric.Server.Monitor.14]
+10.122.225.14
+
+[Eric.Server.Monitor.15]
+10.122.225.15
+
+[Eric.Server.Monitor.sg15]
+10.130.169.15
+
+[Eric.Server.Monitor.16]
+10.122.225.16
+
+[Eric.Server.Monitor.sg16]
+10.130.169.16
+
+[Eric.Server.Monitor.17]
+10.122.225.17
+
+[Eric.Server.Monitor.18]
+10.122.225.18
+
+[Eric.Server.Monitor.20]
+10.122.225.20
+
+[Eric.Server.Monitor.22]
+10.130.169.22
+
+[Eric.Server.Monitor.23]
+10.130.169.23
+
+[Eric.Server.CheckMK-Server.19]
+10.122.225.19
+
+[Eric.Server.Monitor.21]
+10.122.225.21
+
+# This is Ravi's AWS VM
+[Ravi.Server.Monitor.177]
+52.88.198.177
+
+[Eric.Server.AWS.Monitor.17]
+52.89.15.17
+
+[Eric.Server.Percona]
+# 10.121.12.46
+# 10.121.12.35
+# 10.121.12.30
+# 10.121.12.33
+# 10.121.12.32
+
+[Eric.Server.Oracle]
+# 10.121.12.42
+
+[EricsServers]
+# 10.121.12.30
+# 10.121.12.32
+# 10.121.12.35
+# 10.121.12.24
+# 10.121.12.29
+# 10.121.12.18
+
+[DBaaSLoadBalancers]
+# 10.121.12.25
+# 10.121.12.17
+
+[DBaaSServers]
+# 10.121.12.15
+# 10.121.12.16
+# 10.121.12.17
+# 10.121.12.25
+# 10.121.12.26
+# 10.121.12.27
+
+[KevinServer]
+# 10.126.63.12

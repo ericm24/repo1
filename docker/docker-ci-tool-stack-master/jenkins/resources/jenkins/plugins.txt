@@ -1,0 +1,26 @@
+# chef-plugin:0.1.7
+chucknorris:0.5
+clone-workspace-scm:0.6
+cloudbees-credentials:3.3
+config-file-provider:2.9.3
+credentials:1.23
+email-ext:2.40.5
+git-client:1.19.0
+git:2.4.0
+github-api:1.69
+github:1.13.3
+greenballs:1.14
+groovy:1.27
+job-dsl:1.38
+jobConfigHistory:2.12
+junit:1.2
+parameterized-trigger:2.29
+plain-credentials:1.1
+plugin-usage-plugin:0.3
+rebuild:1.25
+ruby-runtime:0.12
+scm-api:0.2
+startup-trigger-plugin:2.5
+ssh:2.4
+token-macro:1.10
+xvfb:1.0.16
