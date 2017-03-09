@@ -2,7 +2,7 @@
 # Configures Jenkins within docker container (Jenkins on Ubuntu).
 #
 
-FROM jenkins
+FROM eric/jenkins:1.642.2
 
 MAINTAINER Eric Manley <compdude@charter.net>
 

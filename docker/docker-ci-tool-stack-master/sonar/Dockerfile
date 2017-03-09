@@ -20,16 +20,17 @@ EXPOSE 9092
 
 # Database configuration
 # Defaults to using H2
+
 ENV SONARQUBE_JDBC_USERNAME sonar
 ENV SONARQUBE_JDBC_PASSWORD sonar
 
 # For Docker Portability
 # Use this for Linux Host
-# ENV SONARQUBE_JDBC_URL jdbc:h2:tcp://localhost:9092/sonar
+ENV SONARQUBE_JDBC_URL jdbc:h2:tcp://localhost:9092/sonar
 
 # Use this for MAC docker-machine host
 # ENV SONARQUBE_JDBC_URL jdbc:h2:tcp://192.168.99.100:9092/sonar
-ENV SONARQUBE_JDBC_URL jdbc:h2:tcp://"$DOCKER_HOST_IP":9092/sonar
+# ENV SONARQUBE_JDBC_URL jdbc:h2:tcp://"$DOCKER_HOST_IP":9092/sonar
 
 ENV SONAR_VERSION 5.1.2
 
@@ -49,7 +50,7 @@ RUN set -x \
 	&& gpg --verify sonarqube.zip.asc \
 	&& unzip sonarqube.zip \
 	&& mv sonarqube-$SONAR_VERSION sonarqube \
-  && rm sonarqube.zip* \
+   && rm sonarqube.zip* \
 	&& rm -rf $SONARQUBE_HOME/bin/*
 
 # Installing Plugins
