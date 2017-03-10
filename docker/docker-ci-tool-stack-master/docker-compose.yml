@@ -36,19 +36,19 @@ sonar:
      - SONARQUBE_JDBC_URL=jdbc:postgresql://localhost:5432/sonar
 
 db:
-  image: eric/postgres
+  image: eric/postgres:9.4.3
   net: container:sonar
   environment:
    - POSTGRES_USER=sonar
    - POSTGRES_PASSWORD=sonar
 
 selhub:
-  image: eric/selenium/hub
+  image: eric/selenium/hub:2.52.0
   ports:
     - "4444:4444"
 
 nodeff:
-  image: eric/selenium/node-firefox-debug
+  image: eric/selenium/node-firefox-debug:2.52.0
   ports:
     - "5900:5900"
   links:
@@ -56,7 +56,7 @@ nodeff:
 
 # Chrome does not work, has some problem on startup, which then causes the rest of the containers to stop.  Why?
 nodechrome:
-  image: eric/selenium/node-chrome-debug
+  image: eric/selenium/node-chrome-debug:2.52.0
   ports:
     - "5901:5901"
   links:
@@ -125,7 +125,7 @@ gitlab:
     - /mnt/dockervolumes/data/gitlab:/home/git/data
 
 redis:
-  image: eric/redis:latest
+  image: eric/redis:2.8.4
   volumes:
     - /mnt/dockervolumes/data/redis:/var/lib/redis
 

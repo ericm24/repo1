@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Install base docker images for lack of image repo...
+#
+
+#  set -x
+  
+	usage(){
+   			echo " "
+   			echo "Installs Dependant Docker Images..."
+   			echo " "
+   			echo "Usage:   $0"
+   			echo " "
+   			echo " "
+   			echo " "
+	exit 1
+	}   
+
+		
+	export T_LOG=
+	export T_LOG=/data/txt/dockerImageSetupLog.txt
+	
+	rm "$T_LOG"
+
+	echo "Loading eric_jenkins-1.642.2.tar..."| 														tee -a "$T_LOG"
+	docker load -i /dev2/docker/images/eric_jenkins-1.642.2.tar| 								tee -a "$T_LOG"
+	
+	echo "Loading eric_gitlab-8.0.3.tar..."| 															tee -a "$T_LOG"	
+	docker load -i /dev2/docker/images/eric_gitlab-8.0.3.tar| 									tee -a "$T_LOG"	
+
+	echo "Loading eric_postgres-9.4.3.tar..."| 														tee -a "$T_LOG"		
+	docker load -i /dev2/docker/images/eric_postgres-9.4.3.tar| 								tee -a "$T_LOG"	
+	
+	echo "Loading eric_postgresql-9.4.3.tar..."| 														tee -a "$T_LOG"		
+	docker load -i /dev2/docker/images/eric_postgresql-9.4.3.tar| 								tee -a "$T_LOG"	
+	
+	echo "Loading eric_redis-2.8.4.tar..."| 															tee -a "$T_LOG"			
+	docker load -i /dev2/docker/images/eric_redis-2.8.4.tar| 									tee -a "$T_LOG"	
+	
+	echo "Loading eric_selenium_node-firefox-debug-2.52.0.tar..."| 							tee -a "$T_LOG"			
+	docker load -i /dev2/docker/images/eric_selenium_node-firefox-debug-2.52.0.tar| 		tee -a "$T_LOG"	
+	
+	echo "Loading eric_selenium_node-chrome-debug-2.52.0.tar..."| 								tee -a "$T_LOG"			
+	docker load -i /dev2/docker/images/eric_selenium_node-chrome-debug-2.52.0.tar| 		tee -a "$T_LOG"	
+	
+	echo "Loading eric_selenium_hub-2.52.0.tar..."| 												tee -a "$T_LOG"			
+	docker load -i /dev2/docker/images/eric_selenium_hub-2.52.0.tar| 							tee -a "$T_LOG"
+
+	echo "Setting up nexus User..."| 																	tee -a "$T_LOG"
+	userdel nexus
+	useradd -u 300 --user-group --system nexus
+	
+	echo "Chowning nexus directories..."| 																tee -a "$T_LOG"
+	mkdir -p /mnt/dockervolumes/data/nexus && chown -R 300 /mnt/dockervolumes/data/nexus
+	mkdir -p /mnt/dockervolumes/data/nexus-standalone && chown -R 300 /mnt/dockervolumes/data/nexus-standalone	
+
+	
