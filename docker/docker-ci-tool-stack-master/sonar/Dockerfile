@@ -80,6 +80,12 @@ RUN set -x \
 # Installing Plugins
 #
 
+#
+# Just in case this directory does not get created...
+#
+RUN set -x \
+   && mkdir -p /opt/sonarqube/extensions/plugins
+
 COPY resources/sonar-java-plugin-3.5.jar /opt/sonarqube/extensions/plugins
 COPY resources/sonar-web-plugin-2.4.jar /opt/sonarqube/extensions/plugins
 COPY resources/sonar-scm-git-plugin-1.1.jar /opt/sonarqube/extensions/plugins
