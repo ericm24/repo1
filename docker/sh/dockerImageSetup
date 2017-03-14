@@ -46,6 +46,9 @@
 	echo "Loading eric_selenium_hub-2.52.0.tar..."| 												tee -a "$T_LOG"			
 	docker load -i /dev2/docker/images/eric_selenium_hub-2.52.0.tar| 							tee -a "$T_LOG"
 
+	echo "Loading eric_java_openjdk-8u45.tar..."| 													tee -a "$T_LOG"			
+	docker load -i /dev2/docker/images/eric_java_openjdk-8u45.tar| 							tee -a "$T_LOG"
+
 	echo "Setting up nexus User..."| 																	tee -a "$T_LOG"
 	userdel nexus
 	useradd -u 300 --user-group --system nexus
