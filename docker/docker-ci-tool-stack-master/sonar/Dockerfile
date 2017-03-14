@@ -6,7 +6,7 @@
 # Original: https://hub.docker.com/_/sonarqube/
 #
 
-FROM java:openjdk-8u45-jdk
+FROM eric/java:openjdk-8u45
 
 MAINTAINER Eric Manley <compdude@charter.net>
 
@@ -41,23 +41,49 @@ ENV SONAR_DOWNLOAD_URL https://sonarsource.bintray.com/Distribution
 # uid       [ unknown] sonarsource_deployer (Sonarsource Deployer) <infra@sonarsource.com>
 # sub   2048R/06855C1D 2015-05-25
 
-RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE
+# RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE
+
+# RUN set -x \
+# 	&& cd /opt \
+# 	&& curl -o sonarqube.zip -fSL http://downloads.sonarsource.com/sonarqube/sonarqube-$SONAR_VERSION.zip \
+# 	&& curl -o sonarqube.zip.asc -fSL http://downloads.sonarsource.com/sonarqube/sonarqube-$SONAR_VERSION.zip.asc \
+# 	&& gpg --verify sonarqube.zip.asc \
+# 	&& unzip sonarqube.zip \
+# 	&& mv sonarqube-$SONAR_VERSION sonarqube \
+#  && rm sonarqube.zip* \
+# 	&& rm -rf $SONARQUBE_HOME/bin/*
+
+#
+# Download (copy) & install Sonar.
+#
+
+COPY resources/sonarqube-$SONAR_VERSION.zip /opt/sonarqube.zip
+COPY resources/sonarqube-$SONAR_VERSION.zip.asc /opt/sonarqube.zip.asc
 
 RUN set -x \
 	&& cd /opt \
-	&& curl -o sonarqube.zip -fSL http://downloads.sonarsource.com/sonarqube/sonarqube-$SONAR_VERSION.zip \
-	&& curl -o sonarqube.zip.asc -fSL http://downloads.sonarsource.com/sonarqube/sonarqube-$SONAR_VERSION.zip.asc \
-	&& gpg --verify sonarqube.zip.asc \
-	&& unzip sonarqube.zip \
-	&& mv sonarqube-$SONAR_VERSION sonarqube \
+ 	&& unzip sonarqube.zip \
+ 	&& mv sonarqube-$SONAR_VERSION sonarqube \
    && rm sonarqube.zip* \
-	&& rm -rf $SONARQUBE_HOME/bin/*
-
+ 	&& rm -rf $SONARQUBE_HOME/bin/*
+	
+# 
 # Installing Plugins
-RUN cd /opt/sonarqube/extensions/plugins/ \
-  && curl -o sonar-java-plugin-3.5.jar -fSL $SONAR_DOWNLOAD_URL/sonar-java-plugin/sonar-java-plugin-3.5.jar \
-  && curl -o sonar-web-plugin-2.4.jar -fSL $SONAR_DOWNLOAD_URL/sonar-web-plugin/sonar-web-plugin-2.4.jar \
-  && curl -o sonar-scm-git-plugin-1.1.jar -fSL http://downloads.sonarsource.com/plugins/org/codehaus/sonar-plugins/sonar-scm-git-plugin/1.1/sonar-scm-git-plugin-1.1.jar
+# RUN cd /opt/sonarqube/extensions/plugins/ \
+#   && curl -o sonar-java-plugin-3.5.jar -fSL $SONAR_DOWNLOAD_URL/sonar-java-plugin/sonar-java-plugin-3.5.jar \
+#   && curl -o sonar-web-plugin-2.4.jar -fSL $SONAR_DOWNLOAD_URL/sonar-web-plugin/sonar-web-plugin-2.4.jar \
+#   && curl -o sonar-scm-git-plugin-1.1.jar -fSL http://downloads.sonarsource.com/plugins/org/codehaus/sonar-plugins/sonar-scm-git-plugin/1.1/sonar-scm-git-plugin-1.1.jar
+# 
+
+
+# 
+# Installing Plugins
+#
+
+COPY resources/sonar-java-plugin-3.5.jar /opt/sonarqube/extensions/plugins
+COPY resources/sonar-web-plugin-2.4.jar /opt/sonarqube/extensions/plugins
+COPY resources/sonar-scm-git-plugin-1.1.jar /opt/sonarqube/extensions/plugins
+
 
 VOLUME ["$SONARQUBE_HOME/data", "$SONARQUBE_HOME/extensions"]
 

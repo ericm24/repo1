@@ -31,7 +31,7 @@
 	echo "Loading eric_postgres-9.4.3.tar..."| 														tee -a "$T_LOG"		
 	docker load -i /dev2/docker/images/eric_postgres-9.4.3.tar| 								tee -a "$T_LOG"	
 	
-	echo "Loading eric_postgresql-9.4.3.tar..."| 														tee -a "$T_LOG"		
+	echo "Loading eric_postgresql-9.4.3.tar..."| 													tee -a "$T_LOG"		
 	docker load -i /dev2/docker/images/eric_postgresql-9.4.3.tar| 								tee -a "$T_LOG"	
 	
 	echo "Loading eric_redis-2.8.4.tar..."| 															tee -a "$T_LOG"			
